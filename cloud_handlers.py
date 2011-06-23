@@ -1,8 +1,9 @@
+from django.conf import settings
 import cloudfiles
 
 def upload_cloud_file( fd, user, project, page, revision ):
-    cloud_user = 'RACKSPACE_USER'
-    cloud_key = 'RACKSPACE_KEY'
+    cloud_user = settings.CLOUD_USER
+    cloud_key = settings.CLOUD_KEY
     cloud_container = 'images'
     
     connection = cloudfiles.get_connection(cloud_user, cloud_key)
