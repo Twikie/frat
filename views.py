@@ -7,7 +7,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from frat.models import *
 from frat.forms import *
 
-from frat.cloud_handlers import upload_cloud_file
+from frat.cloud_handlers import upload_cloud_file, create_cloud_container
 
 def index(request):
     projects = Project.objects.all()
@@ -21,6 +21,7 @@ def newproject(request):
         if form.is_valid():
             new_project = form.save(commit=False)
             new_project.owner = user
+            create_cloud_container(user, new_project.name)
             new_project.save()
             form.save_m2m()
             return HttpResponseRedirect('/%s/%s' % (user, new_project))
