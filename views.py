@@ -4,10 +4,10 @@ from django.template import RequestContext
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect
-from projects.models import *
-from projects.forms import *
+from frat.models import *
+from frat.forms import *
 
-from projects.cloud_handlers import upload_cloud_file
+from frat.cloud_handlers import upload_cloud_file
 
 def index(request):
     projects = Project.objects.all()

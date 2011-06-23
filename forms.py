@@ -1,6 +1,6 @@
 from django import forms
 
-from projects.models import *
+from frat.models import *
 
 class NewProjectForm(forms.ModelForm):
     class Meta:
