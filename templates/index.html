@@ -1,0 +1,9 @@
+{% if projects %}
+    <p>All Projects</p>
+    <ul>
+    {% for project in projects %}
+        <li><a href="/{{ project.owner }}/{{ project.name }}/">/{{ project.owner }}/{{ project.name }}/</a></li>
+    {% endfor %}
+{% else %}
+    <p>We ain't gots no projects to see.</p>
+{% endif %}

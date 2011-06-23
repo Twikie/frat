@@ -1,0 +1,5 @@
+# database stuff
+*.db
+
+# python crap
+*.pyc

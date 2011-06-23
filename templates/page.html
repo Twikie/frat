@@ -1,0 +1,10 @@
+<p><a href="revisions/new/">New Revision</a>
+<p>{{page.name}}</p>
+
+{% if revisions %}
+    {% for revision in revisions %}
+        <li><a href="{{revision.revision_number}}/">{{revision.revision_number}}</a></li>
+    {% endfor %}
+{% else %}
+    <p>We ain't gots no revisions to see.</p>
+{% endif %}

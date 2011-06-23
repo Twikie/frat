@@ -1,0 +1,29 @@
+<form action="" method="post"> {% csrf_token %}
+<h3> {{project.name}} </h3>
+<a href="pages/new/">New Page</a>
+<ul>
+    <li>
+        Owner: <a href="/{{project.owner}}">{{project.owner}}</a>
+    </li>
+    <li>
+        Members:
+        <ul>
+            {% for member in project.members.all %}
+                <li><a href="/{{member}}">{{member}}</a></li>
+            {% endfor %}
+        </ul>
+    </li>
+    <li>
+        Pages:
+        <ul>
+            {% if pages %}
+                {% for page in pages %}
+                    <li><a href="{{page.name}}/">{{page.name}}</a></li>
+                {% endfor %}
+            {% else %}
+                <p>We ain't gots no pages to see.</p>
+            {% endif %}
+        </ul>
+    </li>
+</ul>
+</form>
