@@ -13,5 +13,6 @@ urlpatterns = patterns('',
     url(r'^(?P<page_name>\w+)/$', 'frat.views.page'),
     url(r'^(?P<page_name>\w+)/revisions/new/$', 'frat.views.newrevision'),
     url(r'^(?P<page_name>\w+)/(?P<revision_number>\w+)/$', 'frat.views.revision'),
+    url(r'^(?P<page_name>\w+)/(?P<revision_number>\w+)/annotations/new/', 'frat.views.saveAnnotations'),
 )
 

@@ -1,3 +1,4 @@
+from django.utils import simplejson
 from django.db.models import Q
 from django.shortcuts import render_to_response
 from django.template import RequestContext
@@ -21,7 +22,7 @@ def newproject(request):
         if form.is_valid():
             new_project = form.save(commit=False)
             new_project.owner = user
-            create_cloud_container(user, new_project.name)
+            create_cloud_container(user.username)
             new_project.save()
             form.save_m2m()
             return HttpResponseRedirect('/%s/%s' % (user, new_project))
@@ -60,7 +61,29 @@ def newrevision(request, user_name, project_name, page_name):
     else:
         form = NewRevisionForm()
     return render_to_response('new.html', {'form':form, 'type':'revision'}, context_instance=RequestContext(request))
-    
+
+def saveAnnotations(request, user_name, project_name, page_name, revision_number):
+    user = request.user
+    if request.is_ajax():
+        if request.method == 'POST':
+            if request.POST.__contains__('annotations'):
+                revision_id = request.POST['revision']
+                revision = Revision.objects.get(pk=revision_id)
+                data = request.POST['annotations']
+                annos = simplejson.loads(data)
+                
+                #Deletes all previous annotations
+                Annotation.objects.filter(revision=revision).delete()
+                
+                #Add annotations currently on page
+                for anno in annos:
+                    #return HttpResponse(anno)
+                    new_annotation = Annotation(author=user, revision=revision, x=anno['x'], y=anno['y'], text=anno['text'])
+                    new_annotation.save()
+                return HttpResponse('Saved Annotations')
+    return HttpResponse('Nothing to see.')
+
+
 @login_required
 def project(request, user_name, project_name):
     user = request.user
@@ -84,11 +107,26 @@ def page(request, user_name, project_name, page_name):
 @login_required
 def revision(request, user_name, project_name, page_name, revision_number):
     page_name = page_name.replace('_', ' ')
-
     user = request.user
-    
     owner = User.objects.get(username=user_name)
     project = Project.objects.get(owner=owner, name=project_name)
     page = Page.objects.get(project=project, name=page_name) 
     revision = Revision.objects.get(page=page, revision_number=revision_number)
-    return render_to_response('revision.html', {'revision':revision})
+    comments = Comment.objects.filter(revision=revision)
+    
+    annotation_set = Annotation.objects.filter(revision=revision)
+    
+    ann_list = []
+    
+    for ann in annotation_set:
+        ann_item = dict()
+        ann_item['x'] = ann.x
+        ann_item['y'] = ann.y
+        ann_item['text'] = ann.text
+        ann_list.append(ann_item)
+    
+    annotations = simplejson.dumps( ann_list )
+    return render_to_response('revision.html', {'revision':revision, 'comments':comments, 'annotations':annotations})
+    
+    
+    

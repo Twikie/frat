@@ -6,6 +6,7 @@ class Project(models.Model):
     members = models.ManyToManyField(User, related_name="Project")
     name = models.CharField(max_length=100)
     created_at = models.DateTimeField(auto_now_add = True)
+    is_public = models.BooleanField()
     class Meta:
         unique_together = ("owner", "name")
     def __unicode__(self):
@@ -15,6 +16,7 @@ class Page(models.Model):
     name = models.CharField(max_length=100)
     project = models.ForeignKey(Project)
     created_at = models.DateTimeField(auto_now_add = True)
+    is_approved = models.BooleanField()
     class Meta:
         unique_together = ("project", "name")
         
@@ -33,6 +35,14 @@ class Annotation(models.Model):
     y = models.IntegerField()
     text = models.CharField(max_length=255)
     created_at = models.DateTimeField(auto_now_add = True)
-    
+    last_modified = models.DateTimeField(auto_now = True)
     def __unicode__(self):
         return self.text
+
+class Comment(models.Model):
+    revision = models.ForeignKey(Revision)
+    author = models.ForeignKey(User)
+    reply_to = models.ForeignKey('self')
+    text = models.CharField(max_length=2048)
+    created_at = models.DateTimeField(auto_now_add = True)
+    last_modified = models.DateTimeField(auto_now = True)
