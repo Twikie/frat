@@ -22,7 +22,6 @@ def newproject(request):
         if form.is_valid():
             new_project = form.save(commit=False)
             new_project.owner = user
-            create_cloud_container(user.username)
             new_project.save()
             form.save_m2m()
             return HttpResponseRedirect('/%s/%s' % (user, new_project))
