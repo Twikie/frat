@@ -19,10 +19,6 @@ def upload_cloud_file( fd, username, project, page, revision ):
     #Get the container we're adding files to. Containers are saved to cloudfiles with the name <username_projectname>
     container = connection.get_container( username )
     
-    #Make the container public, this allows us to have a public url for the objects within.
-    #Set the ttl to a big number, because we don't need to edit our files
-    container.make_public(ttl=604800)
-    
     #Create the object with the name <pagename_revisionnumber_filename>
     ob = container.create_object( obj_file_name )
     ob.content_type = fd.content_type
@@ -32,7 +28,7 @@ def upload_cloud_file( fd, username, project, page, revision ):
     
     fd.close()
     
-    #Get the public URI for later access of the object
+    #Get the object name for later access
     return obj_file_name
 
 
