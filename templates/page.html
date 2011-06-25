@@ -1,3 +1,7 @@
+{% extends 'base.html' %}
+
+{% block main %}
+
 <p><a href="revisions/new/">New Revision</a>
 <p>{{page.name}}</p>
 
@@ -8,3 +12,5 @@
 {% else %}
     <p>We ain't gots no revisions to see.</p>
 {% endif %}
+
+{% endblock main %}

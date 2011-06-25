@@ -1,3 +1,5 @@
 Add comment support to revisions
-Add support for deleting projects/pages/revisions/annotations/comments
-Add support for editing the above
+Annotations are deleted and remade each time, we need to just do updates and inserts. Otherwise, created_at and author are changed each time.
+New revisions should increment revision_number automatically
+Add support for deleting projects/pages/revisions/comments
+Add support for editing all of the above

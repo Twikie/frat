@@ -1,10 +1,7 @@
-<a href="javascript:void(0)" class="add control">add</a> | 
-<a href="javascript:void(0)" class="save control">save</a> | 
-<a href="javascript:void(0)" class="toggle control">toggle all</a>
-<p>Revision {{revision.revision_number}}</p>
-<div id="source">
-<img src="../../media/{{revision.media_file_name}}" />
-</div>
+{% extends 'base.html' %}
+{% load gravatar %}
+{% block css %}
+{{ block.super }}
 <style type='text/css'>
 .annotation {
   font-size: 10pt;
@@ -89,6 +86,11 @@
 	right: 18px;
 }
 </style>
+{% endblock css %}
+
+{% block js %}
+{{ block.super }}
+
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js"></script>
 <script src="https://raw.github.com/nthomson/annotate/master/annotate.js"></script>
 <script>
@@ -150,3 +152,39 @@
     }
 });
 </script>
+{% endblock js %}
+
+{% block main %}
+<a href="javascript:void(0)" class="add control">add</a> | 
+<a href="javascript:void(0)" class="save control">save</a> | 
+<a href="javascript:void(0)" class="toggle control">toggle all</a>
+<p>Revision {{revision.revision_number}}</p>
+<div id="source">
+<img src="../../media/{{revision.media_file_name}}" />
+</div>
+
+<div id="todos">
+    <ul>
+        {% for annotation in annotation_set %}
+            <li class="todo">
+                <p><img src="{% gravatar_url annotation.author.email %}" /></p>
+                <p>{{annotation.author}}</p>
+                <p>{{annotation.created_at}}</p>
+                <p>{{annotation.text}}</p>
+            </li>
+        {% endfor %}
+    </ul>
+</div>
+
+<div id="comments">
+
+{% for comment in comments %}
+
+<p>{{comment.author}}@{{comment.reply_to.author}}</p>
+<p>{{comment.created_at}}</p>
+<p>{{comment.text}}</p>
+
+{% endfor %}
+
+</div>
+{% endblock main %}

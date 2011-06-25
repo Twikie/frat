@@ -1,3 +1,6 @@
+{% extends 'base.html' %}
+
+{% block main %}
 <form action="" method="post"> {% csrf_token %}
 <h3> {{project.name}} </h3>
 <a href="pages/new/">New Page</a>
@@ -27,3 +30,5 @@
     </li>
 </ul>
 </form>
+
+{% endblock main %}

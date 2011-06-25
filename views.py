@@ -1,6 +1,6 @@
 from django.utils import simplejson
 from django.db.models import Q
-from django.shortcuts import render_to_response
+from django.shortcuts import render
 from django.template import RequestContext
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
@@ -12,7 +12,7 @@ from frat.cloud_handlers import upload_cloud_file, create_cloud_container, get_o
 
 def index(request):
     projects = Project.objects.all()
-    return render_to_response('index.html', {'projects': projects})
+    return render(request, 'index.html', {'projects': projects})
 
 @login_required
 def newproject(request):
@@ -28,7 +28,7 @@ def newproject(request):
             return HttpResponseRedirect('/%s/%s' % (user, new_project))
     else:
         form = NewProjectForm()
-    return render_to_response('new.html', {'form': form, 'type':'project'}, context_instance=RequestContext(request))
+    return render(request, 'new.html', {'form': form, 'type':'project'})
     
 @login_required
 def newpage(request, user_name, project_name):
@@ -43,7 +43,7 @@ def newpage(request, user_name, project_name):
             return HttpResponseRedirect('/%s/%s' % (user_name, project_name))
     else:
         form = NewPageForm()
-    return render_to_response('new.html', {'form':form, 'type':'page'}, context_instance=RequestContext(request))
+    return render(request, 'new.html', {'form':form, 'type':'page'})
 
 @login_required
 def newrevision(request, user_name, project_name, page_name):
@@ -60,7 +60,7 @@ def newrevision(request, user_name, project_name, page_name):
             return HttpResponseRedirect('/%s/%s/%s' % (user_name, project_name, page_name))
     else:
         form = NewRevisionForm()
-    return render_to_response('new.html', {'form':form, 'type':'revision'}, context_instance=RequestContext(request))
+    return render(request, 'new.html', {'form':form, 'type':'revision'})
 
 def saveAnnotations(request, user_name, project_name, page_name, revision_number):
     user = request.user
@@ -92,7 +92,7 @@ def project(request, user_name, project_name):
     pages = Page.objects.filter(project=project).order_by('-created_at')
     for page in pages:
         page.name = page.name.replace(' ', '_')
-    return render_to_response('project.html', {'project': project, 'pages': pages});
+    return render(request, 'project.html', {'project': project, 'pages': pages});
 
 @login_required
 def page(request, user_name, project_name, page_name):
@@ -102,7 +102,7 @@ def page(request, user_name, project_name, page_name):
     project = Project.objects.get(owner=owner, name=project_name)
     page = Page.objects.get(project=project, name=page_name)
     revisions = Revision.objects.filter(page=page)
-    return render_to_response('page.html', {'page':page, 'revisions': revisions})
+    return render(request, 'page.html', {'page':page, 'revisions': revisions})
 
 @login_required
 def revision(request, user_name, project_name, page_name, revision_number):
@@ -123,10 +123,11 @@ def revision(request, user_name, project_name, page_name, revision_number):
         ann_item['x'] = ann.x
         ann_item['y'] = ann.y
         ann_item['text'] = ann.text
+        ann_item['author'] = ann.author.username
         ann_list.append(ann_item)
     
     annotations = simplejson.dumps( ann_list )
-    return render_to_response('revision.html', {'revision':revision, 'comments':comments, 'annotations':annotations})
+    return render(request, 'revision.html', {'revision':revision, 'comments':comments, 'annotation_set': annotation_set, 'annotations':annotations})
     
 def viewmedia(request, user_name, project_name, object_name):
     project_owner = User.objects.get(username=user_name)

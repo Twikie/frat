@@ -1,3 +1,7 @@
+{% extends 'base.html' %}
+
+{% block main %}
+
 {% if projects %}
     <p>All Projects</p>
     <ul>
@@ -7,3 +11,5 @@
 {% else %}
     <p>We ain't gots no projects to see.</p>
 {% endif %}
+
+{% endblock main %}
