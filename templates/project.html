@@ -1,10 +1,16 @@
 {% extends 'base.html' %}
 
+{% block title %}{{project}}{% endblock title %}
+
 {% block main %}
 <form action="" method="post"> {% csrf_token %}
 <h3> {{project.name}} </h3>
+{% if user == project.owner %}
+    <p><a href="javascript:void(0)" onclick="if( confirm('Are you sure? This will MESS up your shit.') ) { location.href = 'remove'; }">Remove</a></p>
+{% endif %}
 <a href="pages/new/">New Page</a>
 <ul>
+
     <li>
         Owner: <a href="/{{project.owner}}">{{project.owner}}</a>
     </li>

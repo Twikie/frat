@@ -8,7 +8,7 @@ from django.http import HttpResponse, HttpResponseRedirect, HttpResponseForbidde
 from frat.models import *
 from frat.forms import *
 
-from frat.cloud_handlers import upload_cloud_file, create_cloud_container, get_object_data
+from frat.cloud_handlers import upload_cloud_file, create_cloud_container, get_object_data, remove_project_data
 
 def index(request):
     projects = Project.objects.all()
@@ -28,6 +28,17 @@ def newproject(request):
     else:
         form = NewProjectForm()
     return render(request, 'new.html', {'form': form, 'type':'project'})
+
+def removeproject(request, user_name, project_name):
+    user = request.user
+    owner = User.objects.get(username=user_name)
+    if(user == owner):
+        project = Project.objects.get(owner=owner, name=project_name)
+        remove_project_data(project)
+        project.delete()
+    else:
+        return HttpResponseForbidden('You must be the owner to remove this project')
+    return HttpResponseRedirect('/%s' % user_name)
     
 @login_required
 def newpage(request, user_name, project_name):

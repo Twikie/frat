@@ -1,7 +1,7 @@
 from django.conf import settings
 
 from django.contrib.auth.models import User
-from frat.models import Project
+from frat.models import Project, Page, Revision
 
 import cloudfiles
 
@@ -37,15 +37,25 @@ def create_cloud_container ( username ):
     container = connection.create_container( username )
     
 
-def remove_cloud_file ( username, project, page, revision, filename ):
+def remove_cloud_file ( username, filename ):
     connection = cloudfiles.get_connection(cloud_user, cloud_key)
     container = connection.get_container( username )
-    container.delete_object('%s_%s_%s_%s' % (project, page, revision, filename))
+    container.delete_object( filename )
 
 
 def remove_cloud_container ( username ):
     connection = cloudfiles.get_connection(cloud_user, cloud_key)
-    connection.delete_container('%s_%s' % username )
+    connection.delete_container('%s' % username )
+    
+def remove_project_data ( project ):
+    pages = Page.objects.filter(project=project)
+    for page in pages:
+        remove_page_data ( page )
+        
+def remove_page_data ( page ):
+    revisions = Revision.objects.filter(page=page)
+    for revision in revisions:
+        remove_cloud_file( page.project.owner.username, revision.media_file_name )
     
 #returns the amount of space being used in bytes by a specified user
 def space_used_by_user ( username ):
