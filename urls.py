@@ -4,21 +4,21 @@ from django.conf.urls.defaults import patterns, include, url
 urlpatterns = patterns('',
     #/projects/
     url(r'^all', 'frat.views.index'),
-    url(r'^new', 'frat.views.newproject'),
+    url(r'^new', 'frat.views.project.new_project'),
     
     
     #/user_name/project_name/
-    url(r'^$', 'frat.views.project'),
-    url(r'^remove$', 'frat.views.removeproject'),
+    url(r'^$', 'frat.views.project.view_project'),
+    url(r'^remove$', 'frat.views.project.remove_project'),
     
-    url(r'^media/(?P<object_name>.+)/$', 'frat.views.viewmedia'),
+    url(r'^media/(?P<object_name>.+)/$', 'frat.views.media.view_media'),
     
-    url(r'^pages/new/$', 'frat.views.newpage'),
-    url(r'^(?P<page_name>\w+)/$', 'frat.views.page'),
+    url(r'^pages/new/$', 'frat.views.page.new_page'),
+    url(r'^(?P<page_name>\w+)/$', 'frat.views.page.view_page'),
     
-    url(r'^(?P<page_name>\w+)/revisions/new/$', 'frat.views.newrevision'),
-    url(r'^(?P<page_name>\w+)/(?P<revision_number>\w+)/$', 'frat.views.revision'),
+    url(r'^(?P<page_name>\w+)/revisions/new/$', 'frat.views.revision.new_revision'),
+    url(r'^(?P<page_name>\w+)/(?P<revision_number>\w+)/$', 'frat.views.revision.view_revision'),
     
-    url(r'^(?P<page_name>\w+)/(?P<revision_number>\w+)/annotations/new/', 'frat.views.saveAnnotations'),
+    url(r'^(?P<page_name>\w+)/(?P<revision_number>\w+)/annotations/new/', 'frat.views.annotation.save_annotations'),
 )
 
