@@ -9,6 +9,7 @@ urlpatterns = patterns('',
     
     #/user_name/project_name/
     url(r'^$', 'frat.views.project'),
+    url(r'^media/(?P<object_name>.+)/$', 'frat.views.viewmedia'),
     url(r'^pages/new/$', 'frat.views.newpage'),
     url(r'^(?P<page_name>\w+)/$', 'frat.views.page'),
     url(r'^(?P<page_name>\w+)/revisions/new/$', 'frat.views.newrevision'),

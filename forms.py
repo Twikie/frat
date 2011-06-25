@@ -11,7 +11,7 @@ class NewRevisionForm(forms.ModelForm):
     ffile = forms.FileField()    
     class Meta:
         model = Revision
-        exclude = ('page', 'image_url')
+        exclude = ('page', 'media_file_name')
         
         
 class NewPageForm(forms.ModelForm):

@@ -10,6 +10,9 @@ cloud_key = settings.CLOUD_KEY
 
 #We upload a file every time we create a new revision
 def upload_cloud_file( fd, username, project, page, revision ):
+
+    obj_file_name = '%s_%s_%s_%s' % (project, page, revision, fd.name)
+
     #get a connection to the cloud
     connection = cloudfiles.get_connection(cloud_user, cloud_key)
     
@@ -21,7 +24,7 @@ def upload_cloud_file( fd, username, project, page, revision ):
     container.make_public(ttl=604800)
     
     #Create the object with the name <pagename_revisionnumber_filename>
-    ob = container.create_object('%s_%s_%s_%s' % (project, page, revision, fd.name))
+    ob = container.create_object( obj_file_name )
     ob.content_type = fd.content_type
     
     #loop through each chunk in the file and write them to the cloudfiles object
@@ -30,7 +33,7 @@ def upload_cloud_file( fd, username, project, page, revision ):
     fd.close()
     
     #Get the public URI for later access of the object
-    return ob.public_uri()
+    return obj_file_name
 
 
 def create_cloud_container ( username ):
@@ -52,5 +55,11 @@ def remove_cloud_container ( username ):
 def space_used_by_user ( username ):
     connection = cloudfiles.get_connection(cloud_user, cloud_key)
     return connection.get_container( username ).size_used
+    
+def get_object_data (username, filename):
+    connection = cloudfiles.get_connection(cloud_user, cloud_key)
+    container = connection.get_container( username )
+    return container.get_object( filename )
+     
     
     

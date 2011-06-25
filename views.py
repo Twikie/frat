@@ -4,11 +4,11 @@ from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, HttpResponseForbidden
 from frat.models import *
 from frat.forms import *
 
-from frat.cloud_handlers import upload_cloud_file, create_cloud_container
+from frat.cloud_handlers import upload_cloud_file, create_cloud_container, get_object_data
 
 def index(request):
     projects = Project.objects.all()
@@ -55,7 +55,7 @@ def newrevision(request, user_name, project_name, page_name):
             owner = User.objects.get(username=user_name)
             project = Project.objects.get(owner=owner, name=project_name)
             new_revision.page = Page.objects.get(project=project, name=page_name)
-            new_revision.image_url = upload_cloud_file(request.FILES['ffile'], user_name, project_name, page_name, new_revision.revision_number)
+            new_revision.media_file_name = upload_cloud_file(request.FILES['ffile'], user_name, project_name, page_name, new_revision.revision_number)
             new_revision.save()
             return HttpResponseRedirect('/%s/%s/%s' % (user_name, project_name, page_name))
     else:
@@ -128,5 +128,12 @@ def revision(request, user_name, project_name, page_name, revision_number):
     annotations = simplejson.dumps( ann_list )
     return render_to_response('revision.html', {'revision':revision, 'comments':comments, 'annotations':annotations})
     
+def viewmedia(request, user_name, project_name, object_name):
+    project_owner = User.objects.get(username=user_name)
+    project = Project.objects.get(owner=project_owner, name=project_name)
     
-    
+    #If the user is the owner, or on the member's list. They can see this image
+    if ( not project.is_private or request.user == project_owner or project.members.filter(username=request.user.username).count() > 0 ):  
+        obj = get_object_data(user_name, object_name)
+        return HttpResponse(obj.read(), mimetype=obj.content_type)
+    return HttpResponseForbidden('Forbidden')

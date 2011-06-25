@@ -6,7 +6,7 @@ class Project(models.Model):
     members = models.ManyToManyField(User, related_name="Project")
     name = models.CharField(max_length=100)
     created_at = models.DateTimeField(auto_now_add = True)
-    is_public = models.BooleanField()
+    is_private = models.BooleanField()
     class Meta:
         unique_together = ("owner", "name")
     def __unicode__(self):
@@ -24,7 +24,7 @@ class Revision(models.Model):
     page = models.ForeignKey(Page)
     revision_number = models.IntegerField()
     created_at = models.DateTimeField(auto_now_add = True)
-    image_url = models.URLField()
+    media_file_name = models.URLField()
     class Meta:
         unique_together = ("page", "revision_number")
 
