@@ -2,92 +2,16 @@
 {% load gravatar %}
 {% block title %}Revision {{revision.revision_number}}{% endblock title %}
 {% block css %}
-{{ block.super }}
-<style type='text/css'>
-.annotation {
-  font-size: 10pt;
-	background: #fff;
-	border: 5px #99f solid;
-	border-radius: 5px;
-	padding: 1px;
-	min-height: 26px;
-	min-width: 80px;
-}
-
-.annotation textarea {
-	border: 0;
-	margin:0;
-	background: transparent;
-	overflow-y: hidden;
-	margin: 4px;
-	width: 175px;
-	height: 16px;
-
-}
-
-.annotation:after {
-	content: '';
-	height:0;
-	width: 0;
-	position: absolute;
-	top: -20px;
-	left: 10px;
-	border: 10px solid transparent;
-	border-bottom: 10px solid #fff;
-}
-
-.annotation:before {
-	content: '';
-	height:0;
-	width: 0;
-	position: absolute;
-	top: -31px;
-	left: 5px;
-	border: 15px solid transparent;
-	border-bottom: 15px solid #99f;
-}
-
-
-.annotation textarea:focus {
-	outline: none;
-}
-
-.annotation .buttons {
-	position: absolute;
-	top: -20px;
-	right: -5px;
-	line-height: 15px;
-	font-size: 10pt;
-	font-weight: bold;
-	border: 5px #99f solid;
-	border-bottom: 0;
-
-	background: #fff;
-	z-index: 1000;
-	border-radius: 5px;
-	border-bottom-right-radius: 0;
-	border-bottom-left-radius: 0;
-}
-
-.annotation a.button {
-	padding: 7px;
-	text-align: center;
-	text-decoration: none;
-	color: #555;
-}
-.annotation a.button:hover {
-	color: #000;
-}
-
-.annotation a.remove {
-	right: -13px;
-}
-
-.annotation a.toggle {
-	right: 18px;
-}
-</style>
+    {{ block.super }}
+    <link rel="stylesheet" type="text/css" href="/media/css/revision.css" />
 {% endblock css %}
+
+{% block js %}
+    {{block.super}}
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js"></script>
+    <script src="/media/js/annotate/annotate.js"></script>
+    <script src="/media/js/revision.js"></script>
+{% endblock js %}
 
 {% block main %}
 <a href="javascript:void(0)" class="add control">add</a> | 
@@ -122,67 +46,4 @@
 {% endfor %}
 
 </div>
-
-
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js"></script>
-<script src="https://raw.github.com/nthomson/annotate/master/annotate.js"></script>
-<script>
-    var settings = {
-		source_element: '#source',
-		annotation_xoff: -25,
-		annotation_yoff: 10,
-		add_control: '.add.control',
-		toggle_control: '.toggle.control',
-	};
-	var save_annotations_to = new Object();
-	var saved_annotations = {% autoescape off %} {{annotations}}; {% endautoescape %}
-
-	annotate_js(settings, save_annotations_to, saved_annotations);
-	
-	$('.save.control').click(function(){
-	    var json = JSON.stringify(save_annotations_to.json);
-	    console.log(json);
-	    $.post('annotations/new/', {annotations: json, revision:'{{revision.pk}}'}, function(data){
-	        console.log(data);
-	    });
-	});
-	
-	
-	$(document).ajaxSend(function(event, xhr, settings) {
-    function getCookie(name) {
-        var cookieValue = null;
-        if (document.cookie && document.cookie != '') {
-            var cookies = document.cookie.split(';');
-            for (var i = 0; i < cookies.length; i++) {
-                var cookie = jQuery.trim(cookies[i]);
-                // Does this cookie string begin with the name we want?
-                if (cookie.substring(0, name.length + 1) == (name + '=')) {
-                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                    break;
-                }
-            }
-        }
-        return cookieValue;
-    }
-    function sameOrigin(url) {
-        // url could be relative or scheme relative or absolute
-        var host = document.location.host; // host + port
-        var protocol = document.location.protocol;
-        var sr_origin = '//' + host;
-        var origin = protocol + sr_origin;
-        // Allow absolute or scheme relative URLs to same origin
-        return (url == origin || url.slice(0, origin.length + 1) == origin + '/') ||
-            (url == sr_origin || url.slice(0, sr_origin.length + 1) == sr_origin + '/') ||
-            // or any other URL that isn't scheme relative or absolute i.e relative.
-            !(/^(\/\/|http:|https:).*/.test(url));
-    }
-    function safeMethod(method) {
-        return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
-    }
-
-    if (!safeMethod(settings.type) && sameOrigin(settings.url)) {
-        xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
-    }
-});
-</script>
 {% endblock main %}
