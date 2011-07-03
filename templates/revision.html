@@ -11,6 +11,30 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js"></script>
     <script src="/media/js/annotate/annotate.js"></script>
     <script src="/media/js/revision.js"></script>
+    <script>
+    $(document).ready(function(){
+    var settings = {
+		source_element: '#source',
+		annotation_xoff: -25,
+		annotation_yoff: 10,
+		add_control: '.add.control',
+		toggle_control: '.toggle.control',
+	};
+	var save_annotations_to = new Object();
+	var saved_annotations = {% autoescape off %} {{annotations}}; {% endautoescape %}
+
+	annotate_js(settings, save_annotations_to, saved_annotations);
+	
+	$('.save.control').click(function(){
+	    var json = JSON.stringify(save_annotations_to.json);
+	    console.log(json);
+	    $.post('annotations/new/', {annotations: json, revision:'{{revision.pk}}'}, function(data){
+	        console.log(data);
+	    });
+	});
+	
+});
+    </script>
 {% endblock js %}
 
 {% block main %}

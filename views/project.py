@@ -6,15 +6,19 @@ from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from frat.cloud_handlers import remove_project_data
 
+def view_all(request):
+    projects = Project.objects.all()
+
+
 @login_required
 def view_project(request, user_name, project_name):
     user = request.user
-    owner = User.objects.get(username=user_name);
+    owner = User.objects.get(username=user_name)
     project = Project.objects.get(owner=owner, name=project_name)
     pages = Page.objects.filter(project=project).order_by('-created_at')
     for page in pages:
         page.name = page.name.replace(' ', '_')
-    return render(request, 'project.html', {'project': project, 'pages': pages});
+    return render(request, 'project.html', {'project': project, 'pages': pages})
 
 @login_required
 def new_project(request):
