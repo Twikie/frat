@@ -52,7 +52,7 @@
         {% for annotation in annotation_set %}
             <li class="todo">
                 <div class="head">
-		            <a href="/{{annotation.author}}"><img width="36" src="{% gravatar_url annotation.author.email %}"></a>
+		            <a href="/{{annotation.author}}">{% gravatar_img annotation.author.email 36 %}</a>
 		            <div class="info">
 			            <div class="author"><a href="/{{annotation.author}}"">{{annotation.author}}</a></div>
 			            <div class="time">{{annotation.created_at}}</div>
