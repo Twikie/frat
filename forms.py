@@ -17,4 +17,4 @@ class NewRevisionForm(forms.ModelForm):
 class NewPageForm(forms.ModelForm):
     class Meta:
         model = Page
-        exclude = ('project')
+        exclude = ('project', 'is_approved')

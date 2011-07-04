@@ -16,7 +16,7 @@ class Page(models.Model):
     name = models.CharField(max_length=100)
     project = models.ForeignKey(Project)
     created_at = models.DateTimeField(auto_now_add = True)
-    is_approved = models.BooleanField()
+    is_approved = models.BooleanField(default=False)
     class Meta:
         unique_together = ("project", "name")
         
@@ -42,7 +42,7 @@ class Annotation(models.Model):
 class Comment(models.Model):
     revision = models.ForeignKey(Revision)
     author = models.ForeignKey(User)
-    reply_to = models.ForeignKey('self')
+    reply_to = models.ForeignKey('self', null=True)
     text = models.CharField(max_length=2048)
     created_at = models.DateTimeField(auto_now_add = True)
     last_modified = models.DateTimeField(auto_now = True)
