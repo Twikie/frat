@@ -47,13 +47,18 @@
 </div>
 
 <div id="todos">
+    <h3>To-Do List</h3>
     <ul>
         {% for annotation in annotation_set %}
             <li class="todo">
-                <p><img src="{% gravatar_url annotation.author.email %}" /></p>
-                <p>{{annotation.author}}</p>
-                <p>{{annotation.created_at}}</p>
-                <p>{{annotation.text}}</p>
+                <div class="head">
+		            <a href="/{{annotation.author}}"><img width="36" src="{% gravatar_url annotation.author.email %}"></a>
+		            <div class="info">
+			            <div class="author"><a href="/{{annotation.author}}"">{{annotation.author}}</a></div>
+			            <div class="time">{{annotation.created_at}}</div>
+		            </div>
+	            </div>
+	            <p>{{annotation.text}}</p>
             </li>
         {% endfor %}
     </ul>
