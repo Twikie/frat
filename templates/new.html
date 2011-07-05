@@ -1,5 +1,7 @@
 {% extends 'base.html' %}
-{% block title %}New {{type|capfirst}}{% endblock title %}
+{% block secondary-nav %}
+    <h3>{% block title %}New {{type|capfirst}}{% endblock title %}</h3>
+{% endblock secondary-nav %}
 {% block main %}
 <form enctype="multipart/form-data" action="" method="post"> {% csrf_token %}
 <h3> New {{type|capfirst}} </h3>

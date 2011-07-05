@@ -1,6 +1,8 @@
 {% extends 'base.html' %}
 {% load gravatar %}
-{% block title %}Revision {{revision.revision_number}}{% endblock title %}
+{% block secondary-nav %}
+    <h3>{% block title %}{{revision.page.project.name}} >{{revision.page.name}} > Revision {{revision.revision_number}}{% endblock title %}</h3>
+{% endblock secondary-nav %}
 {% block css %}
     {{ block.super }}
     <link rel="stylesheet" type="text/css" href="/media/css/revision.css" />

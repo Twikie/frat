@@ -3,7 +3,9 @@ from django.conf.urls.defaults import patterns, include, url
 
 urlpatterns = patterns('',
     #/projects/
-    url(r'^all', 'frat.views.index'),
+    url(r'^all', 'frat.views.general.all_projects'),
+    url(r'^recent', 'frat.views.general.recent_projects'),
+    url(r'^approved', 'frat.views.general.approved_projects'),
     url(r'^new', 'frat.views.project.new_project'),
     
     

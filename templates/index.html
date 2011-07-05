@@ -1,15 +1,19 @@
 {% extends 'base.html' %}
 
+
+
+{% block secondary-nav %}
+    <h3>{% block title %}{{type|capfirst}} Projects{% endblock title %}</h3>
+{% endblock secondary-nav %}
+
 {% block main %}
-
-{% if projects %}
-    <p>All Projects</p>
-    <ul>
-    {% for project in projects %}
-        <li><a href="/{{ project.owner }}/{{ project.name }}/">/{{ project.owner }}/{{ project.name }}/</a></li>
-    {% endfor %}
-{% else %}
-    <p>We ain't gots no projects to see.</p>
-{% endif %}
-
+    {% if projects %}
+        <p>{{type|capfirst}} Projects</p>
+        <ul>
+        {% for project in projects %}
+            <li><a href="/{{ project.owner }}/{{ project.name }}/">/{{ project.owner }}/{{ project.name }}/</a></li>
+        {% endfor %}
+    {% else %}
+        <p>We ain't gots no projects to see.</p>
+    {% endif %}
 {% endblock main %}

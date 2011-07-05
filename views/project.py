@@ -6,10 +6,6 @@ from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from frat.cloud_handlers import remove_project_data
 
-def view_all(request):
-    projects = Project.objects.all()
-
-
 @login_required
 def view_project(request, user_name, project_name):
     user = request.user
