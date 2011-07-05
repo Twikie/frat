@@ -11,7 +11,7 @@
         <p>{{type|capfirst}} Projects</p>
         <ul>
         {% for project in projects %}
-            <li><a href="/{{ project.owner }}/{{ project.name }}/">/{{ project.owner }}/{{ project.name }}/</a></li>
+            <li><a href="/{{ project.owner }}/{{ project.slug }}/">{{ project.name }} - {{ project.owner }}</a></li>
         {% endfor %}
     {% else %}
         <p>We ain't gots no projects to see.</p>

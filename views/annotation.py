@@ -5,7 +5,7 @@ from django.contrib.auth.decorators import login_required
 from frat.cloud_handlers import upload_cloud_file
 from django.utils import simplejson
 
-def save_annotations(request, user_name, project_name, page_name, revision_number):
+def save_annotations(request, user_name, project_slug, page_slug, revision_number):
     user = request.user
     if request.is_ajax():
         if request.method == 'POST':

@@ -32,6 +32,7 @@
 	    console.log(json);
 	    $.post('annotations/new/', {annotations: json, revision:'{{revision.pk}}'}, function(data){
 	        console.log(data);
+	        window.location.reload();
 	    });
 	});
 	

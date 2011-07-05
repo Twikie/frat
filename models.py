@@ -7,6 +7,7 @@ class Project(models.Model):
     name = models.CharField(max_length=100)
     created_at = models.DateTimeField(auto_now_add = True)
     is_private = models.BooleanField()
+    slug = models.SlugField(unique=True, max_length=255, blank=True)
     class Meta:
         unique_together = ("owner", "name")
     def __unicode__(self):
@@ -17,6 +18,7 @@ class Page(models.Model):
     project = models.ForeignKey(Project)
     created_at = models.DateTimeField(auto_now_add = True)
     is_approved = models.BooleanField(default=False)
+    slug = models.SlugField(unique=True, max_length=255, blank=True)
     class Meta:
         unique_together = ("project", "name")
         
@@ -25,6 +27,7 @@ class Revision(models.Model):
     revision_number = models.IntegerField()
     created_at = models.DateTimeField(auto_now_add = True)
     media_file_name = models.URLField()
+    slug = models.SlugField(unique=True, max_length=255, blank=True)
     class Meta:
         unique_together = ("page", "revision_number")
 

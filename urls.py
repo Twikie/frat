@@ -16,11 +16,12 @@ urlpatterns = patterns('',
     url(r'^media/(?P<object_name>.+)/$', 'frat.views.media.view_media'),
     
     url(r'^pages/new/$', 'frat.views.page.new_page'),
-    url(r'^(?P<page_name>\w+)/$', 'frat.views.page.view_page'),
+    url(r'^(?P<page_slug>[-\w]+)/$', 'frat.views.page.view_page'),
     
-    url(r'^(?P<page_name>\w+)/revisions/new/$', 'frat.views.revision.new_revision'),
-    url(r'^(?P<page_name>\w+)/(?P<revision_number>\w+)/$', 'frat.views.revision.view_revision'),
+    url(r'^(?P<page_slug>[-\w]+)/revisions/new/$', 'frat.views.revision.new_revision'),
+    url(r'^(?P<page_slug>[-\w]+)/(?P<revision_number>[-\w]+)/$', 'frat.views.revision.view_revision'),
     
-    url(r'^(?P<page_name>\w+)/(?P<revision_number>\w+)/annotations/new/', 'frat.views.annotation.save_annotations'),
+    url(r'^(?P<page_slug>[-\w]+)/(?P<revision_number>[-\w]+)/annotations/new/', 'frat.views.annotation.save_annotations'),
+    
 )
 
