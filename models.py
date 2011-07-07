@@ -27,7 +27,6 @@ class Revision(models.Model):
     revision_number = models.IntegerField()
     created_at = models.DateTimeField(auto_now_add = True)
     media_file_name = models.URLField()
-    slug = models.SlugField(unique=True, max_length=255, blank=True)
     class Meta:
         unique_together = ("page", "revision_number")
 

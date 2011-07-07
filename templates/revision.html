@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% load gravatar %}
 {% block secondary-nav %}
-    <h3>{% block title %}{{revision.page.project.name}} >{{revision.page.name}} > Revision {{revision.revision_number}}{% endblock title %}</h3>
+    <h3>{% block title %}{{revision.page.project.name}} > {{revision.page.name}} > Revision {{revision.revision_number}}{% endblock title %}</h3>
 {% endblock secondary-nav %}
 {% block css %}
     {{ block.super }}
@@ -49,6 +49,20 @@
 <img src="../../media/{{revision.media_file_name}}" />
 </div>
 
+<div id="comments">
+
+{% for comment in comments %}
+
+<p>{{comment.author}}@{{comment.reply_to.author}}</p>
+<p>{{comment.created_at}}</p>
+<p>{{comment.text}}</p>
+
+{% endfor %}
+
+</div>
+{% endblock main %}
+
+{% block rightpane %}
 <div id="todos">
     <h3>To-Do List</h3>
     <ul>
@@ -66,16 +80,4 @@
         {% endfor %}
     </ul>
 </div>
-
-<div id="comments">
-
-{% for comment in comments %}
-
-<p>{{comment.author}}@{{comment.reply_to.author}}</p>
-<p>{{comment.created_at}}</p>
-<p>{{comment.text}}</p>
-
-{% endfor %}
-
-</div>
-{% endblock main %}
+{% endblock rightpane %}
