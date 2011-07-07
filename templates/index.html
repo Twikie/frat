@@ -1,19 +1,47 @@
 {% extends 'base.html' %}
 
-
-
 {% block secondary-nav %}
     <h3>{% block title %}{{type|capfirst}} Projects{% endblock title %}</h3>
 {% endblock secondary-nav %}
 
+{% block css %}
+    {{block.super}}
+    <link rel="stylesheet" type="text/css" href="/media/css/projects.css" />
+{% endblock css %}
+
 {% block main %}
+    <ul class="projects">
     {% if projects %}
-        <p>{{type|capfirst}} Projects</p>
-        <ul>
         {% for project in projects %}
-            <li><a href="/{{ project.owner }}/{{ project.slug }}/">{{ project.name }} - {{ project.owner }}</a></li>
+            <li>
+            <a href="/{{ project.owner }}/{{ project.slug }}/">
+                <div class="project">
+                    {% with notes=project.page_set.all.count %} <!--Change this to get the number of notifications-->
+                        {% if notes > 0 %}
+                            <div class="count" title="You have {{notes}} notification{{notes|pluralize}}.">{{notes}}</div>
+                        {% endif %}
+                    {% endwith %}
+                    <div class="thumbnail">
+                        
+                    </div>
+                    <div class="name"><strong>Name:</strong> {{ project.name }}</div>
+                    <hr />
+                    <div class="name"><strong>Created:</strong> {{ project.created_at|date:"m/d/y" }}</div>
+                </div>
+            </a>
+            </li>
         {% endfor %}
-    {% else %}
-        <p>We ain't gots no projects to see.</p>
+         <li>
+            <a href="/projects/new/" title="Add a Project">
+                <div class="project new">
+                    <div class="text">Add a Project</div>
+                    <div class="price">
+                        <span>Add<br /> $.99</span>
+                    </div>
+                </div>
+            </a>
+            </li>
     {% endif %}
+    </ul>
+    
 {% endblock main %}
