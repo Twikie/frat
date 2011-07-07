@@ -8,13 +8,14 @@ class NewProjectForm(forms.ModelForm):
         exclude = ('owner', 'slug')
 
 class NewRevisionForm(forms.ModelForm):
-    ffile = forms.FileField()    
+    image_file = forms.FileField()    
     class Meta:
         model = Revision
-        exclude = ('page', 'media_file_name', 'slug')
+        exclude = ('page', 'media_file_name', 'slug', 'revision_number')
         
         
 class NewPageForm(forms.ModelForm):
+    image_file = forms.FileField()
     class Meta:
         model = Page
         exclude = ('project', 'is_approved', 'slug')

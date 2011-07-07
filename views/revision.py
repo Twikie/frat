@@ -6,6 +6,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from frat.cloud_handlers import upload_cloud_file
 from django.utils import simplejson
+from django.db.models import Max
 
 @login_required
 def view_revision(request, user_name, project_slug, page_slug, revision_number):
@@ -41,8 +42,11 @@ def new_revision(request, user_name, project_slug, page_slug):
             new_revision = form.save(commit=False)
             owner = User.objects.get(username=user_name)
             project = Project.objects.get(owner=owner, slug=project_slug)
-            new_revision.page = Page.objects.get(project=project, slug=page_slug)
-            new_revision.media_file_name = upload_cloud_file(request.FILES['ffile'], user_name, project_slug, page_slug, new_revision.revision_number)
+            rev_page = Page.objects.get(project=project, slug=page_slug)
+            new_revision.page = rev_page
+            rev_num = Revision.objects.filter(page=rev_page).aggregate(Max('revision_number'))['revision_number__max'] + 1
+            new_revision.revision_number = rev_num
+            new_revision.media_file_name = upload_cloud_file(request.FILES['image_file'], user_name, project_slug, page_slug, new_revision.revision_number)
             new_revision.save()
             return HttpResponseRedirect('/%s/%s/%s' % (user_name, project_slug, page_slug))
     else:
