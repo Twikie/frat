@@ -1,19 +1,37 @@
 {% extends 'base.html' %}
 
-{% block secondary-nav %}
-    <h3>{% block title %} {{page.project.name}} > {{page.name}}{% endblock title %}</h3>
-{% endblock secondary-nav %}
-{% block main %}
+{% block css %}
+    {{block.super}}
+    <link rel="stylesheet" type="text/css" href="/media/css/page.css" />
+{% endblock css %}
 
-<p><a href="revisions/new/">New Revision</a>
-<p>{{page.name}}</p>
+{%block body%}
+    <div class="backbar"><a href="/projects/all">&larr; Back to Projects</a></div>
+    <div class="infobar">
+        <span class="name">{{page.project.name}}</span>
+        <span class="access">
+            Project is {%if page.project.is_private%} Private {% else %} Public {% endif %}
+        </span>
+    </div>
+    <div class="toolbar">
+        <div class="tools">
+            <ul>
+                <li><a href="javascript:void(0)">Settings</a></li>
+                <li><a href="javascript:void(0)">Twikies</a></li>
+                <li><a href="javascript:void(0)">Zoom</a></li>
+                <li><a href="javascript:void(0)">Move</a></li>
+            </ul>
+        </div>
+        <div class="pages">
+            <ul>
+                {% for other_page in page.project.page_set.all %}
+                <li{% if other_page.pk == page.pk %} class="selected"{% endif %}><a href="../{{other_page.slug}}">{{other_page.name}}</a></li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+        <div id="source">
+            <img src="../media/{{latest.media_file_name}}" />
+        </div>
+{%endblock body%}
 
-{% if revisions %}
-    {% for revision in revisions %}
-        <li><a href="{{revision.revision_number}}/">{{revision.revision_number}}</a></li>
-    {% endfor %}
-{% else %}
-    <p>We ain't gots no revisions to see.</p>
-{% endif %}
-
-{% endblock main %}

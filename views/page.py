@@ -13,8 +13,8 @@ def view_page(request, user_name, project_slug, page_slug):
     owner = User.objects.get(username=user_name)
     project = Project.objects.get(owner=owner, slug=project_slug)
     page = Page.objects.get(project=project, slug=page_slug)
-    revisions = Revision.objects.filter(page=page)
-    return render(request, 'page.html', {'page':page, 'revisions': revisions})
+    latest = Revision.objects.filter(page=page).order_by('-revision_number')[0]
+    return render(request, 'page.html', {'page':page, 'latest':latest})
 
 @login_required
 def new_page(request, user_name, project_slug):
